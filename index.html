@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeSync - Your Personal Life Management App</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>LifeSync</h1>
+                <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active" data-page="dashboard"><i class="fas fa-home"></i> Dashboard</li>
+                <li data-page="tasks"><i class="fas fa-tasks"></i> Tasks</li>
+                <li data-page="notes"><i class="fas fa-sticky-note"></i> Notes</li>
+                <li data-page="calendar"><i class="fas fa-calendar-alt"></i> Calendar</li>
+                <li data-page="finance"><i class="fas fa-wallet"></i> Finance</li>
+                <li data-page="smart-planner"><i class="fas fa-robot"></i> Smart Planner</li>
+                <li data-page="settings"><i class="fas fa-cog"></i> Settings</li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>&copy; 2025 LifeSync</p>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <section id="dashboard" class="page active">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p class="date-display"></p>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="card summary-card">
+                        <div class="card-header">
+                            <h3>Today's Summary</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="summary-item">
+                                <i class="fas fa-tasks"></i>
+                                <div>
+                                    <h4>Tasks</h4>
+                                    <p><span id="pending-tasks">0</span> pending</p>
+                                </div>
+                            </div>
+                            <div class="summary-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <div>
+                                    <h4>Events</h4>
+                                    <p><span id="today-events">0</span> today</p>
+                                </div>
+                            </div>
+                            <div class="summary-item">
+                                <i class="fas fa-wallet"></i>
+                                <div>
+                                    <h4>Budget</h4>
+                                    <p>$<span id="budget-remaining">0</span> remaining</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card ai-suggestion-card">
+                        <div class="card-header">
+                            <h3>AI Suggestions</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="ai-suggestions">
+                                <p class="placeholder-text">Connect Gemini API to get personalized suggestions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card quick-tasks-card">
+                        <div class="card-header">
+                            <h3>Quick Tasks</h3>
+                            <button id="add-quick-task" class="btn-icon"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <ul id="quick-tasks-list" class="tasks-list">
+                                <li class="placeholder-text">Add your first quick task</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card upcoming-card">
+                        <div class="card-header">
+                            <h3>Upcoming Events</h3>
+                        </div>
+                        <div class="card-body">
+                            <ul id="upcoming-events" class="events-list">
+                                <li class="placeholder-text">No upcoming events</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tasks Page -->
+            <section id="tasks" class="page">
+                <div class="page-header">
+                    <h2>Tasks</h2>
+                    <button id="add-task" class="btn primary"><i class="fas fa-plus"></i> Add Task</button>
+                </div>
+                <div class="tasks-container">
+                    <div class="tasks-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="today">Today</button>
+                        <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    </div>
+                    <div class="tasks-list-container">
+                        <ul id="tasks-list" class="tasks-list full-list">
+                            <li class="placeholder-text">No tasks yet. Click "Add Task" to create one.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notes Page -->
+            <section id="notes" class="page">
+                <div class="page-header">
+                    <h2>Notes</h2>
+                    <button id="add-note" class="btn primary"><i class="fas fa-plus"></i> Add Note</button>
+                </div>
+                <div class="notes-container" id="notes-container">
+                    <div class="placeholder-text">No notes yet. Click "Add Note" to create one.</div>
+                </div>
+            </section>
+
+            <!-- Calendar Page -->
+            <section id="calendar" class="page">
+                <div class="page-header">
+                    <h2>Calendar</h2>
+                    <button id="add-event" class="btn primary"><i class="fas fa-plus"></i> Add Event</button>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-navigation">
+                        <button id="prev-month" class="btn-icon"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="current-month">April 2025</h3>
+                        <button id="next-month" class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-header">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div id="calendar-days" class="calendar-days">
+                            <!-- Calendar days will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="events-for-day">
+                        <h4 id="selected-date">Events for Today</h4>
+                        <ul id="events-list" class="events-list">
+                            <li class="placeholder-text">No events for this day</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Finance Page -->
+            <section id="finance" class="page">
+                <div class="page-header">
+                    <h2>Finance</h2>
+                    <div class="finance-actions">
+                        <button id="add-income" class="btn success"><i class="fas fa-plus"></i> Income</button>
+                        <button id="add-expense" class="btn danger"><i class="fas fa-minus"></i> Expense</button>
+                    </div>
+                </div>
+                <div class="finance-container">
+                    <div class="finance-summary">
+                        <div class="summary-box income">
+                            <h3>Income</h3>
+                            <p>$<span id="total-income">0.00</span></p>
+                        </div>
+                        <div class="summary-box expenses">
+                            <h3>Expenses</h3>
+                            <p>$<span id="total-expenses">0.00</span></p>
+                        </div>
+                        <div class="summary-box balance">
+                            <h3>Balance</h3>
+                            <p>$<span id="total-balance">0.00</span></p>
+                        </div>
+                    </div>
+                    <div class="finance-chart-container">
+                        <canvas id="finance-chart"></canvas>
+                    </div>
+                    <div class="transactions-container">
+                        <h3>Recent Transactions</h3>
+                        <ul id="transactions-list" class="transactions-list">
+                            <li class="placeholder-text">No transactions yet</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Smart Planner Page -->
+            <section id="smart-planner" class="page">
+                <div class="page-header">
+                    <h2>Smart Planner</h2>
+                    <button id="generate-plan" class="btn primary"><i class="fas fa-magic"></i> Generate Plan</button>
+                </div>
+                <div class="smart-planner-container">
+                    <div class="api-setup" id="api-setup">
+                        <h3>Connect Gemini API</h3>
+                        <p>To use the Smart Planner, you need to connect your Gemini API key.</p>
+                        <div class="form-group">
+                            <label for="gemini-api-key">Gemini API Key</label>
+                            <input type="password" id="gemini-api-key" placeholder="Enter your Gemini API key">
+                        </div>
+                        <button id="save-api-key" class="btn primary">Connect API</button>
+                    </div>
+                    <div class="planner-preferences" id="planner-preferences" style="display: none;">
+                        <h3>Planner Preferences</h3>
+                        <div class="form-group">
+                            <label for="productivity-hours">Productivity Hours</label>
+                            <select id="productivity-hours">
+                                <option value="morning">Morning Person (5AM - 12PM)</option>
+                                <option value="afternoon">Afternoon Person (11AM - 6PM)</option>
+                                <option value="evening">Evening Person (3PM - 10PM)</option>
+                                <option value="night">Night Owl (8PM - 3AM)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="break-frequency">Break Frequency</label>
+                            <select id="break-frequency">
+                                <option value="pomodoro">Pomodoro (25 min work, 5 min break)</option>
+                                <option value="long">Long Sessions (50 min work, 10 min break)</option>
+                                <option value="short">Short Sessions (15 min work, 5 min break)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Work-Life Balance Priority</label>
+                            <div class="range-slider">
+                                <span>Work</span>
+                                <input type="range" id="work-life-balance" min="1" max="10" value="5">
+                                <span>Life</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="generated-plan" id="generated-plan" style="display: none;">
+                        <h3>Your Optimized Schedule</h3>
+                        <div class="timeline" id="ai-timeline">
+                            <!-- AI generated schedule will appear here -->
+                            <div class="placeholder-text">Click "Generate Plan" to create your optimized schedule</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Page -->
+            <section id="settings" class="page">
+                <div class="page-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="settings-container">
+                    <div class="settings-group">
+                        <h3>Appearance</h3>
+                        <div class="setting-item">
+                            <div>
+                                <h4>Dark Mode</h4>
+                                <p>Switch between light and dark theme</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="dark-mode-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <h4>Color Theme</h4>
+                                <p>Choose your preferred color theme</p>
+                            </div>
+                            <div class="color-themes">
+                                <button class="color-theme active" data-theme="blue" style="background-color: #4361ee;"></button>
+                                <button class="color-theme" data-theme="green" style="background-color: #2ec4b6;"></button>
+                                <button class="color-theme" data-theme="purple" style="background-color: #7209b7;"></button>
+                                <button class="color-theme" data-theme="orange" style="background-color: #f77f00;"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3>Notifications</h3>
+                        <div class="setting-item">
+                            <div>
+                                <h4>Task Reminders</h4>
+                                <p>Get notified about upcoming tasks</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="task-notifications" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <h4>Event Alerts</h4>
+                                <p>Get notified about calendar events</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="event-notifications" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3>Data Management</h3>
+                        <div class="setting-item">
+                            <div>
+                                <h4>Export Data</h4>
+                                <p>Download all your data as JSON</p>
+                            </div>
+                            <button id="export-data" class="btn secondary">Export</button>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <h4>Import Data</h4>
+                                <p>Import data from a JSON file</p>
+                            </div>
+                            <button id="import-data" class="btn secondary">Import</button>
+                        </div>
+                        <div class="setting-item danger-zone">
+                            <div>
+                                <h4>Clear All Data</h4>
+                                <p>Delete all your data (cannot be undone)</p>
+                            </div>
+                            <button id="clear-data" class="btn danger">Clear</button>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3>About</h3>
+                        <div class="about-info">
+                            <h4>LifeSync</h4>
+                            <p>Version 1.0.0</p>
+                            <p>A comprehensive life management application</p>
+                            <p>Built with ❤️ using HTML, CSS, and JavaScript</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="task-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Task</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="task-form">
+                    <div class="form-group">
+                        <label for="task-title">Title</label>
+                        <input type="text" id="task-title" placeholder="Enter task title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Description</label>
+                        <textarea id="task-description" placeholder="Enter task description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due-date">Due Date</label>
+                        <input type="date" id="task-due-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn secondary close-modal">Cancel</button>
+                        <button type="submit" class="btn primary">Save Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="note-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Note</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="note-form">
+                    <div class="form-group">
+                        <label for="note-title">Title</label>
+                        <input type="text" id="note-title" placeholder="Enter note title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-content">Content</label>
+                        <textarea id="note-content" placeholder="Enter note content" rows="6" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-color">Color</label>
+                        <div class="note-colors">
+                            <button type="button" class="note-color active" data-color="#ffffff"></button>
+                            <button type="button" class="note-color" data-color="#ffcccc"></button>
+                            <button type="button" class="note-color" data-color="#ccffcc"></button>
+                            <button type="button" class="note-color" data-color="#ccccff"></button>
+                            <button type="button" class="note-color" data-color="#ffffcc"></button>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn secondary close-modal">Cancel</button>
+                        <button type="submit" class="btn primary">Save Note</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="event-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Event</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="event-form">
+                    <div class="form-group">
+                        <label for="event-title">Title</label>
+                        <input type="text" id="event-title" placeholder="Enter event title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date">Date</label>
+                        <input type="date" id="event-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-time">Time</label>
+                        <input type="time" id="event-time">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-description">Description</label>
+                        <textarea id="event-description" placeholder="Enter event description"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn secondary close-modal">Cancel</button>
+                        <button type="submit" class="btn primary">Save Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="transaction-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="transaction-modal-title">Add Transaction</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="transaction-form">
+                    <input type="hidden" id="transaction-type" value="income">
+                    <div class="form-group">
+                        <label for="transaction-amount">Amount</label>
+                        <div class="amount-input">
+                            <span>$</span>
+                            <input type="number" id="transaction-amount" placeholder="0.00" step="0.01" min="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-category">Category</label>
+                        <select id="transaction-category">
+                            <!-- Categories will be populated by JavaScript based on transaction type -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-date">Date</label>
+                        <input type="date" id="transaction-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-description">Description</label>
+                        <input type="text" id="transaction-description" placeholder="Enter description">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn secondary close-modal">Cancel</button>
+                        <button type="submit" class="btn primary">Save Transaction</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/app.js" type="module"></script>
+</body>
+</html>

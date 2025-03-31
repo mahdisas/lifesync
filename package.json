@@ -1,0 +1,23 @@
+{
+  "name": "lifesync",
+  "version": "1.0.0",
+  "description": "A comprehensive life management web application",
+  "main": "server.js",
+  "scripts": {
+    "start": "python -m http.server 3000",
+    "dev": "python -m http.server 3000"
+  },
+  "keywords": [
+    "life management",
+    "todo",
+    "calendar",
+    "notes",
+    "finance",
+    "AI planner"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
